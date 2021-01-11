@@ -1,0 +1,38 @@
+[server default]
+#访问数据库的账户和密码
+user=mha
+password=mha
+# 指定mha的工作目录
+manager_workdir=/home/mysql_mha
+# mha日志文件的存放路径
+manager_log=/home/mysql_mha/manager.log
+# 指定mha在远程节点上的工作目录
+remote_workdir=/home/mysql_mha
+# 可以使用ssh登录的用户
+ssh_user=root
+# 用于主从复制的MySQL用户和密码
+repl_user=root
+repl_password=root
+# 指定间隔多少秒检测一次
+ping_interval=1
+# 指定master节点存放binlog日志文件的目录
+master_binlog_dir=/var/lib/mysql
+# 指定一个脚本，该脚本实现了在主从切换之后，将虚拟IP漂移到新的Master上
+master_ip_failover_script=/usr/bin/master_ip_failover
+# 指定用于二次检查节点状态的脚本
+secondary_check_script=/usr/bin/masterha_secondary_check -s 192.168.10.250 -s 192.168.10.251 -s 192.168.10.254
+
+# 配置集群中的节点信息
+[server1]
+hostname=192.168.10.250
+# 指定该节点可以参与Master选举
+candidate_master=1
+
+[server2]
+hostname=192.168.10.251
+candidate_master=1
+
+[server3]
+hostname=192.168.10.254
+# 指定该节点不能参与Master选举
+no_master=1
